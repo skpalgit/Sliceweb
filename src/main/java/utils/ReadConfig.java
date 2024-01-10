@@ -7,20 +7,20 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ReadConfig {
-    static Properties prop;
+    Properties prop;
         public ReadConfig(){
-            File file = new File("configuration/config.properties");
-            prop= new Properties();
-            FileInputStream fs = null;
+
             try {
-                fs = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            try {
+                File file = new File ("C:\\Users\\Admin\\Documents\\Appinventive\\Appinventive\\Automation\\GetSlice\\src\\main\\java\\configuration\\config.properties");
+                prop  = new Properties();
+                FileInputStream fs = new FileInputStream(file);
                 prop.load(fs);
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+
+                e.printStackTrace();
             }
 
         }
@@ -28,7 +28,7 @@ public class ReadConfig {
             String browser = prop.getProperty("browser");
             return browser;
         }
-    public static String getWebUrl() {
+    public String getWebUrl() {
         String url = prop.getProperty("baseUrl");
         return url;
 

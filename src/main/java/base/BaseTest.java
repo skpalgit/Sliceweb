@@ -13,6 +13,8 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import utils.ReadConfig;
+import io.percy.selenium.Percy;
+
 
 import java.awt.*;
 import java.io.File;
@@ -22,16 +24,17 @@ import java.time.Duration;
 
 public class BaseTest {
     public static WebDriver driver;
+
     public static ExtentReports extentReports;
     public static ExtentTest extentTest;
-    public String baseURL=ReadConfig.getWebUrl();
     // calling the method from Readconfig class
     ReadConfig readConfig = new ReadConfig();
     public String browser = readConfig.getBrowser();
+    public String baseURL = readConfig.getWebUrl();
 
     @BeforeSuite
     public void initiateExtentReports() {
-        ExtentReports extentReports = new ExtentReports();
+        extentReports = new ExtentReports();
         ExtentSparkReporter sparkReporter_all = new ExtentSparkReporter("AllTests.html");
         extentReports.attachReporter(sparkReporter_all);
 
@@ -39,13 +42,16 @@ public class BaseTest {
         extentReports.setSystemInfo("Java Version", System.getProperty("java.name"));
     }
     @AfterSuite
-    public void generateExtentReports() throws IOException {
-        extentReports.flush();
+    public void generateExtentReport() {
+
         try {
+            extentReports.flush();
             Desktop.getDesktop().browse(new File("AllTests.html").toURI());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+
     }
 
     // This method is used to generate the Extent Report
@@ -53,7 +59,7 @@ public class BaseTest {
     public void checkStatus(Method m, ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
             String screenshotPath = null;
-            screenshotPath = String.valueOf(captureScreenshot(result.getTestContext().getName() + "_" + result.getMethod().getMethodName() + ".jpg"));
+            screenshotPath = captureScreenshot(result.getTestContext().getName() + "_" + result.getMethod().getMethodName() + ".jpg");
             extentTest.addScreenCaptureFromPath(screenshotPath);
             extentTest.fail(result.getThrowable());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
@@ -83,9 +89,9 @@ public class BaseTest {
     }
 
 
-
+    // Launching browser
 @BeforeMethod
-    public <context> void launchBrowser(ITestContext context, String browser){
+    public void launchBrowser(ITestContext context){
         if (browser.equalsIgnoreCase("chrome")){
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
@@ -105,7 +111,7 @@ public class BaseTest {
 
     // assignAuthor is used to display author name in Extent Report
 
-    extentTest.assignAuthor(author);
+    //extentTest.assignAuthor(author);
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
     }
