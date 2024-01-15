@@ -15,5 +15,6 @@ public class HomePage extends BaseTest {
 }
     public void signupNaviagtionButton(){
         driver.findElement(By.xpath("//a[normalize-space()='SIGNUP']")).click();
+
     }
 }

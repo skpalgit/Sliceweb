@@ -1,6 +1,7 @@
-package PackageTest;
+package packageTest;
 
 import base.BaseTest;
+import org.openqa.selenium.WebDriver;
 import pageObjects.HomePage;
 import org.testng.annotations.Test;
 

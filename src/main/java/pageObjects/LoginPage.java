@@ -1,7 +1,9 @@
 package pageObjects;
 
 import base.BaseTest;
+import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 public class LoginPage extends BaseTest {
     public void enterUserName(){
@@ -14,6 +16,8 @@ public class LoginPage extends BaseTest {
 
     }
     public void loginContinueButton(){
-        driver.findElement(By.xpath("//button[@type='submit']"));
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.getCurrentUrl();
+
     }
 }
