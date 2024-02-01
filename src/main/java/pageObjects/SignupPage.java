@@ -27,10 +27,20 @@ public class SignupPage extends BaseTest {
     private WebElement passwordInput ;
     @FindBy(xpath = "//*[contains(@name,'tnc')]")
     private WebElement tncCheckbox ;
-    @FindBy(xpath = "//button[@class='btn']")
-    private WebElement contimueButton;
-    @FindBy(xpath = "//button[@class='btn secondary uppercase']")
+    @FindBy(xpath = "//button[normalize-space()='Accept']")
+    private WebElement acceptButton;
+    @FindBy(xpath = "//button[normalize-space()='CREATE ACCOUNT']")
+    private WebElement createAccountBtn;
+    @FindBy(xpath = "//h1[normalize-space()='Verify your email']")
+    private WebElement verifyUrEmail;
+   /* @FindBy(xpath = "//button[@class='btn secondary uppercase']")
     public WebElement acceptTnC;
+    @FindBy(xpath = "document.querySelector(\".MuiDialogContent-root.accept_terms_body.css-1ty026z\").scrollTop=12000")
+    public WebElement tncPage;*/
+   @FindBy(xpath = "//img[@alt='google icon']")
+   private WebElement googleSignupLogin;
+    @FindBy(xpath = "//img[@alt='facebook icon']")
+    private WebElement fbSignupLogin;
 
 
 
@@ -63,14 +73,26 @@ public class SignupPage extends BaseTest {
 
     }
     public void setTncCheckbox(){
+
         tncCheckbox.click();
     }
     public void setAcceptTnC(){
-        scrollPageToEnd(acceptTnC);
-        acceptTnC.click();
+        scrollPageToEnd();
+       // acceptTnC.click();
     }
-    public void setContimueButton(){
-        contimueButton.click();
+    public void setAcceptButton(){
+
+        acceptButton.click();
+    }
+    public void setCreateaccountBtn(){
+
+        createAccountBtn.click();
+    }
+    public void setGoogleSignupLogin(){
+        googleSignupLogin.click();
+    }
+    public void setFbSignupLogin(){
+        fbSignupLogin.click();
     }
 
 
@@ -117,11 +139,13 @@ public class SignupPage extends BaseTest {
         return sb.toString()+addchar;
     }
     // Function to scroll to the end of the page using JavaScript
-    private void scrollPageToEnd(WebElement popup) {
+    private void scrollPageToEnd() {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
         // Execute JavaScript to scroll to the end of the page
-        jsExecutor.executeScript("arguments[0].scrollTop = arguments[0].scrollHeight;", popup);
+        //jsExecutor.executeScript("arguments[0].scrollTop = arguments[0].scrollHeight;", tncPage);
+        jsExecutor.executeScript("document.querySelector(\".MuiDialogContent-root.accept_terms_body.css-1ty026z\").scrollTop=12000");
+
 
         //jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight)");
     }

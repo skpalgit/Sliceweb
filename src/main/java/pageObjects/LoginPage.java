@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 
 public class LoginPage extends BaseTest {
     public void enterUserName(){
-        driver.findElement(By.xpath("//*[contains(@name,'email')]")).sendKeys("sandeep.pal@appinventive.com");
+        driver.findElement(By.xpath("//*[contains(@name,'email')]")).sendKeys("dg@yopmail.com");
 
     }
     public void enterPassword(){

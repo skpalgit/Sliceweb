@@ -1,22 +1,18 @@
 package packageTest;
 
 import base.BaseTest;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
-import pageObjects.HomePage;
+import pageObjects.LandingPage;
 import pageObjects.SignupPage;
 
-import java.time.Duration;
-
 public class SignupTest extends BaseTest {
-    HomePage homePage = new HomePage();
+    LandingPage landingPage = new LandingPage();
     SignupPage signupPage;
 
     @Test
     public void testSignup() throws InterruptedException {
         driver.get(baseURL);
-        homePage.signupNaviagtionButton();
+        landingPage.signupNaviagtionButton();
         extentTest.info("Launching landing screen");
         Thread.sleep(2000);
         //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
@@ -38,8 +34,16 @@ public class SignupTest extends BaseTest {
         Thread.sleep(2000);
         signupPage.setAcceptTnC();
         extentTest.info("AcceptTnC");
-        Thread.sleep(1000);
-        signupPage.setContimueButton();
-        Thread.sleep(20000);
+        Thread.sleep(3000);
+        signupPage.setAcceptButton();
+        Thread.sleep(2000);
+        signupPage.setCreateaccountBtn();
+        extentTest.info("We have sent a verification link to your email account");
+        Thread.sleep(2000);
+        //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        /*String alertMessage = driver.findElement(By.xpath("//div[contains(text(),'We have sent a verification link to your email account')]')]")).getText();
+        String expectedResult ="We have sent a verification link to your email account";
+        extentTest.info(alertMessage);
+        Assert.assertEquals(alertMessage,expectedResult);*/
     }
 }

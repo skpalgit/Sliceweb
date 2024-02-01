@@ -167,6 +167,17 @@ public class BaseTest {
     public void Click(WebElement element) {
         element.click();
     }
+    public void referesh() {
+        driver.navigate().refresh();
+    }
+
+    public void backward() {
+        driver.navigate().back();
+    }
+
+    public void forward() {
+        driver.navigate().forward();
+    }
 
 
 
