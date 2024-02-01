@@ -20,6 +20,13 @@ public class InvestTest extends BaseTest {
         Thread.sleep(2000);
         investPage = new InvestPage(driver);
         investPage.setCheckSlicesRemaining();
+        extentTest.info("check......." +driver.getCurrentUrl());
+        investPage.setPrimaryInvestVale();
+        investPage.setPrimaryInvestBtn();
+        extentTest.info("Naviagtion to invest " +driver.getCurrentUrl());
+        Thread.sleep(2000);
+        investPage.setInvestTnC();
+        Thread.sleep(20000000);
 
 
     }

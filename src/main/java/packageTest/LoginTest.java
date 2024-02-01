@@ -11,7 +11,7 @@ import java.time.Duration;
 
 public class LoginTest extends BaseTest {
     LandingPage landingPage = new LandingPage();
-    LoginPage loginPage = new LoginPage();
+    LoginPage loginPage;
     @Test
     public void testLogin() throws InterruptedException {
         driver.get(baseURL);
@@ -19,12 +19,14 @@ public class LoginTest extends BaseTest {
         landingPage.loginNavigationButton();
         extentTest.info("Clicked Login button ");
         driver.getTitle();
-        loginPage.enterUserName();
+        loginPage= new LoginPage(driver);
+        Thread.sleep(2000);
+        loginPage.setEnterUserName();
         extentTest.info("Enter UserName");
-        loginPage.enterPassword();
+        loginPage.setEnterPassword();
         extentTest.info("Entered password");
         Thread.sleep(2000);
-        loginPage.loginContinueButton();
+        loginPage.setLoginContinueButton();
         extentTest.info("Clicked on Continue button");
         Thread.sleep(5000);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));

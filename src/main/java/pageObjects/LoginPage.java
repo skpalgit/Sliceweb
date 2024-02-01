@@ -4,20 +4,32 @@ import base.BaseTest;
 import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage extends BaseTest {
-    public void enterUserName(){
-        driver.findElement(By.xpath("//*[contains(@name,'email')]")).sendKeys("dg@yopmail.com");
+    public LoginPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
+    @FindBy(xpath = "//*[contains(@name,'email')]")
+    private WebElement enterUserName;
+    @FindBy(xpath = "//*[contains(@name,'password')]")
+    private WebElement enterPassword;
+    @FindBy(xpath = "//button[@type='submit']")
+    private WebElement loginContinueButton;
+    public void setEnterUserName(){
+        enterUserName.sendKeys("dg@yopmail.com");
 
     }
-    public void enterPassword(){
+    public void setEnterPassword(){
         //driver.findElement(By.xpath("//input[@id=':ru:']")).click();
-        driver.findElement(By.xpath("//*[contains(@name,'password')]")).sendKeys("Test@123");
+        enterPassword.sendKeys("Test@123");
 
     }
-    public void loginContinueButton(){
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
-        driver.getCurrentUrl();
+    public void setLoginContinueButton(){
+        loginContinueButton.click();
+       //extentTest.info("Navigate to home page" +driver.getCurrentUrl());
 
     }
 }
