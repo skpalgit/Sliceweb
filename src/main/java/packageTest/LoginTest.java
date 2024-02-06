@@ -28,10 +28,10 @@ public class LoginTest extends BaseTest {
         Thread.sleep(2000);
         loginPage.setLoginContinueButton();
         extentTest.info("Clicked on Continue button");
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        String alertMessage = driver.findElement(By.xpath("//div[contains(text(),'Logged-In successfully.')]")).getText();
-        String expectedResult ="Logged-In successfully.";
+        String alertMessage = driver.findElement(By.xpath("//div[contains(text(),'Login successful')]")).getText();
+        String expectedResult ="Login successful";
         extentTest.info(alertMessage);
         Assert.assertEquals(alertMessage,expectedResult);
         Thread.sleep(2000);

@@ -17,16 +17,20 @@ public class InvestTest extends BaseTest {
         HomePage homePage = new HomePage(driver);
         loginTest.testLogin();
         homePage.setInvestTab();
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         investPage = new InvestPage(driver);
         investPage.setCheckSlicesRemaining();
         extentTest.info("check......." +driver.getCurrentUrl());
-        investPage.setPrimaryInvestVale();
+        Thread.sleep(3000);
+        investPage.setPrimaryInvestValue();
         investPage.setPrimaryInvestBtn();
         extentTest.info("Naviagtion to invest " +driver.getCurrentUrl());
         Thread.sleep(2000);
         investPage.setInvestTnC();
-        Thread.sleep(20000000);
+        investPage.setInvestBtn();
+        Thread.sleep(2000);
+        investPage.setInvestmentAmount();
+        Thread.sleep(20000);
 
 
     }
