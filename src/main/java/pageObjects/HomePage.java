@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HomePage extends BaseTest {
-    // Constructor to initialize elements using PageFactory
+    // Constructor to initialize this page's elements with Selenium's PageFactory
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
+    // Locators for elements on the HomePage
     @FindBy(xpath = "//div[@class='complete_bar']")
     private WebElement progressBar;
     @FindBy(xpath = "//h3[normalize-space()='HOME']")
@@ -28,37 +29,40 @@ public class HomePage extends BaseTest {
 
     @FindBy(xpath = "//h3[normalize-space()='PERKS OF INVESTMENT']")
     private WebElement perksOfInvestment;
-    //@FindBy(how = How.TAG_NAME, using = "a")
+    // Using className to find elements representing indexes of investment perks
     @FindBy(className = "investment_body")
     private List<WebElement> poiIndexList;
     @FindBy(xpath = "//h2[normalize-space()='JUST SLICE THINGS']")
-    private  WebElement justSliceText;
+    private WebElement justSliceText;
+    // Locating a list of elements representing "Just Slice Things" section
     @FindBy(xpath = "(//div[@class='slice_carousal_card'])[1]")
     private List<WebElement> justSliceThings;
     @FindBy(xpath = "//h3[normalize-space()='BLOGS']")
     private WebElement blogsTab;
     @FindBy(xpath = "(//button[normalize-space()='View all'])[1]")
     private WebElement blogsViewAll;
-    /*@FindBy(xpath = "//button[normalize-space()='View all']")
-    private WebElement blogsViewAll;*/
     @FindBy(xpath = "//button[normalize-space()='Get Started']")
     private WebElement getStarted;
+    // List of elements representing rewards
     @FindBy(xpath = "//div[@class='rewards_cards']")
     private List<WebElement> getRewardList;
     @FindBy(xpath = "//h2[normalize-space()='SLICE AMBASSADORS']")
     private WebElement sliceAmbassadors;
+    // Locator for a list of ambassadors using partial class name matching
     @FindBy(xpath = "(//a[contains(@class,'ambassadors_carousel')])")
     private List<WebElement> ambassadorsList;
     @FindBy(xpath = "//h3[normalize-space()='NEWS']")
     private WebElement newsCarousel;
     @FindBy(xpath = "//a[contains(text(),'FAQ’s')]")
     private WebElement faqsFooter;
+    // Finding FAQ list elements
     @FindBy(xpath = "(//div[contains(@class,'faqlist')])")
     private List<WebElement> faqLists;
     @FindBy(xpath = "//a[normalize-space()='Privacy Policy']")
     private WebElement privacyPolicy;
     @FindBy(xpath = "//a[normalize-space()='Terms & Conditions']")
     private WebElement termsAndCondition;
+    // Social media and app store links in the footer
     @FindBy(xpath = "//a[@href='https://www.facebook.com/slice.ooo/']")
     private WebElement fbFooter;
     @FindBy(xpath = "//a[@href='https://twitter.com/Slicesuperapp']")
@@ -76,7 +80,9 @@ public class HomePage extends BaseTest {
     @FindBy(xpath = "//img[contains(@alt,'website logo')]")
     private WebElement webLogo;
 
+    // Method to interact with the progress bar and log information
     public void setProgressBar() {
+        // Implementation details...
         if (progressBar.isDisplayed()) {
             String barPercentage = progressBar.getText();
             System.out.print(barPercentage);
@@ -91,7 +97,7 @@ public class HomePage extends BaseTest {
 
         }
     }
-
+    // Methods to interact with various elements on the page like tabs, buttons, and verifying their states
     public void setHomeTab() {
         extentTest.info("Home Tab " + homeTab.getText());
         homeTab.click();
@@ -103,7 +109,7 @@ public class HomePage extends BaseTest {
         perksOfInvestment.isEnabled();
         perksOfInvestment.click();
     }
-
+    // Method to interact with elements lists using dynamic selection
     public void getYourElementList() {
         //Dynamic selection using Random class
         for (WebElement option : poiIndexList){
@@ -139,6 +145,7 @@ public class HomePage extends BaseTest {
         justSliceThings.get(randomNo).click();
 
     }
+    // Methods for interacting with the Blogs section and verifying navigation
     public void setBlogs() throws InterruptedException {
         extentTest.info("Check blogs is active " +blogsTab.getText());
         extentTest.info("Check blogs View All button is available " +blogsViewAll);
@@ -206,6 +213,7 @@ public class HomePage extends BaseTest {
         Thread.sleep(2000);
         webLogo.click();
     }
+    // Methods for interacting with footer elements like social media links
     public void setFbFooter(){
         extentTest.info("Verify Footer facebook ");
         fbFooter.click();

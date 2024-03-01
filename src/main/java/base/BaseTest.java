@@ -15,7 +15,6 @@ import org.testng.annotations.*;
 import utils.ReadConfig;
 import io.percy.selenium.Percy;
 
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -24,55 +23,50 @@ import java.time.Duration;
 
 public class BaseTest {
     public static WebDriver driver;
-
     public static ExtentReports extentReports;
     public static ExtentTest extentTest;
-    // calling the method from Readconfig class
+
+    // Configuration and browser setup
     ReadConfig readConfig = new ReadConfig();
     public String browser = readConfig.getBrowser();
     public String baseURL = readConfig.getWebUrl();
 
+    // Initialize ExtentReports before the test suite starts
     @BeforeSuite
     public void initiateExtentReports() {
         extentReports = new ExtentReports();
         ExtentSparkReporter sparkReporter_all = new ExtentSparkReporter("AllTests.html");
         extentReports.attachReporter(sparkReporter_all);
-
         extentReports.setSystemInfo("OS", System.getProperty("os.name"));
-        extentReports.setSystemInfo("Java Version", System.getProperty("java.name"));
+        extentReports.setSystemInfo("Java Version", System.getProperty("java.version"));
     }
+
+    // Generate and open the Extent Report after all tests are completed
     @AfterSuite
     public void generateExtentReport() {
-
         try {
             extentReports.flush();
             Desktop.getDesktop().browse(new File("AllTests.html").toURI());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
-    // This method is used to generate the Extent Report
+    // After each test method, check the test's status and take necessary actions
     @AfterMethod
     public void checkStatus(Method m, ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
-            String screenshotPath = null;
-            screenshotPath = captureScreenshot(result.getTestContext().getName() + "_" + result.getMethod().getMethodName() + ".jpg");
+            String screenshotPath = captureScreenshot(result.getTestContext().getName() + "_" + result.getMethod().getMethodName() + ".jpg");
             extentTest.addScreenCaptureFromPath(screenshotPath);
             extentTest.fail(result.getThrowable());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
             extentTest.pass(m.getName() + " is passed");
         }
-
         extentTest.assignCategory(m.getAnnotation(Test.class).groups());
-
         extentTest.assignCategory(m.getAnnotation(Test.class).testName());
-
-
     }
 
+    // Capture screenshot and save to reports directory
     public static String captureScreenshot(String fileName) {
         TakesScreenshot ts = (TakesScreenshot) driver;
         File sourceFile = ts.getScreenshotAs(OutputType.FILE);
@@ -80,105 +74,62 @@ public class BaseTest {
         try {
             FileUtils.copyFile(sourceFile, destinationFile);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println("Screenshot saved successfully");
         return destinationFile.getAbsolutePath();
-
     }
 
-
-    // Launching browser
-@BeforeMethod
-    public void launchBrowser(ITestContext context){
-        if (browser.equalsIgnoreCase("chrome")){
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
-        } else if (browser.equalsIgnoreCase("firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-            driver = new FirefoxDriver();
-        } else if (browser.equalsIgnoreCase("edge")) {
-            WebDriverManager.edgedriver().setup();
-            driver=new EdgeDriver();
-
+    // Launch the browser specified in the configuration before each test method
+    @BeforeMethod
+    public void launchBrowser(ITestContext context) {
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                break;
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                driver = new EdgeDriver();
+                break;
         }
         driver.manage().window().maximize();
-    // getCurrentXmlTest method is used to author name via getParameter method
-
-    extentTest = extentReports.createTest(context.getName());
-    String author = context.getCurrentXmlTest().getParameter("author");
-
-    // assignAuthor is used to display author name in Extent Report
-
-    //extentTest.assignAuthor(author);
-    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-
+        extentTest = extentReports.createTest(context.getName());
+        String author = context.getCurrentXmlTest().getParameter("author");
+        // The following line is commented out but it's used to assign author name in the report
+        // extentTest.assignAuthor(author);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
     }
-    // to quit the browser
+
+    // Quit the browser after each test method
     @AfterTest
-    public void tearDown(){
-    driver.quit();
+    public void tearDown() {
+        driver.quit();
     }
-    // to capture the screenshot
+
+    // Capture screenshot in base64 format
     public static String captureScreenShotBase64() {
         TakesScreenshot ts = (TakesScreenshot) driver;
         String base64 = ts.getScreenshotAs(OutputType.BASE64);
         System.out.println("Screenshot saved successfully using base64");
         return base64;
     }
-    public void closeCurrentWindow() {
-        driver.close();
-    }
 
-    public void elementSendData(WebElement element, String data) {
-        element.sendKeys(data);
-    }
-
-    public void quitBrowser() {
-        driver.quit();
-    }
-
-    public WebElement elementById(String idAttributeValue) {
-        WebElement element = driver.findElement(By.id(idAttributeValue));
-        return element;
-    }
-
-    public WebElement elementByName(String nameAtrributeValue) {
-        WebElement element = driver.findElement(By.name(nameAtrributeValue));
-        return element;
-    }
-
-    public WebElement elementByClassName(String classNameAtrributeValue) {
-        WebElement element = driver.findElement(By.name(classNameAtrributeValue));
-        return element;
-    }
-
-    public WebElement elementByXpath(String xpath) {
-        WebElement element = driver.findElement(By.xpath(xpath));
-        return element;
-    }
-
-    public String elementText(WebElement element) {
-        String text = element.getText();
-        return text;
-    }
-
-    public void Click(WebElement element) {
-        element.click();
-    }
-    public void referesh() {
-        driver.navigate().refresh();
-    }
-
-    public void backward() {
-        driver.navigate().back();
-    }
-
-    public void forward() {
-        driver.navigate().forward();
-    }
-
-
-
+    // Utility methods for interacting with web elements and navigating the browser
+    public void closeCurrentWindow() { driver.close(); }
+    public void elementSendData(WebElement element, String data) { element.sendKeys(data); }
+    public void quitBrowser() { driver.quit(); }
+    public WebElement elementById(String idAttributeValue) { return driver.findElement(By.id(idAttributeValue)); }
+    public WebElement elementByName(String nameAttributeValue) { return driver.findElement(By.name(nameAttributeValue)); }
+    public WebElement elementByClassName(String classNameAttributeValue) { return driver.findElement(By.className(classNameAttributeValue)); }
+    public WebElement elementByXpath(String xpath) { return driver.findElement(By.xpath(xpath)); }
+    public String elementText(WebElement element) { return element.getText(); }
+    public void Click(WebElement element) { element.click(); }
+    public void refresh() { driver.navigate().refresh(); }
+    public void backward() { driver.navigate().back(); }
+    public void forward() { driver.navigate().forward(); }
 }

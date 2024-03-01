@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.Arrays;
+
 public class InvestPage extends BaseTest {
     public InvestPage(WebDriver driver){
         PageFactory.initElements(driver,this);
@@ -30,8 +32,10 @@ public class InvestPage extends BaseTest {
     private WebElement acceptTnc;
     @FindBy(xpath = "//div[@class='right_col']//button[1]")
     private WebElement investBtn;
-    @FindBy(xpath = "div[class='checkout_invest_wrapper'] h2")
+    @FindBy(css = "div[class='checkout_invest_wrapper'] h2")
     private WebElement investmentAmount;
+    @FindBy(css = "div[class='d_flex'] p")
+    private WebElement investAmount;
     public void setCheckSlicesRemaining(){
         //check the remaining slice in live property
         String getValue = checkSlicesRemaining.getText();
@@ -70,11 +74,11 @@ public class InvestPage extends BaseTest {
             extentTest.log(Status.valueOf("Failed to parse invest value: " + numericValueString), e);
         }
     }*/
-    public float setPrimaryInvestValue(){
-        String investText = primaryInvestVale.getText();
+    public float setPrimaryInvestValue( ) {
+        String investText = investAmount.getText();
         // Assuming investText is something like "AED 1234.56"
         String numericValueString = investText.replaceAll("[^\\d.]", "");
-        float investmentAmountValue = 0.0f;
+        float investmentAmountValue = 0.00f;
         try {
             investmentAmountValue = Float.parseFloat(numericValueString);
             extentTest.info("Investment Amount value: " + investmentAmountValue);
@@ -95,14 +99,19 @@ public class InvestPage extends BaseTest {
     public void setInvestTnC(){
         investTnC.click();
         scrollInvestTnC();
-        acceptTnc.click();
+        //acceptTnc.click();
 
 
     }
+
+    public void setAcceptTnc() {
+        acceptTnc.click();
+    }
+
     public void scrollInvestTnC(){
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript("document.querySelector(\".MuiDialogContent-root.accept_terms_body.css-1ty026z\").scrollTop=12000");
-
+        setPrimaryInvestValue();
     }
     public void setInvestBtn(){
         /*JavascriptExecutor jse = (JavascriptExecutor)driver;
@@ -110,22 +119,26 @@ public class InvestPage extends BaseTest {
         investBtn.click();
         extentTest.info("get navigation " +driver.getCurrentUrl());
     }
-    public float setInvestmentAmount(){
-        /*String investText = investmentAmount.getText();
-        String[] inevestAmt = investText.split("");
-        extentTest.info(".............." +Arrays.toString(inevestAmt));*/
-        float totalInvest = setPrimaryInvestValue();
-        float investmentAmountValue = setInvestmentAmount();
+    public void setInvestmentAmount(float f) {
+        // Get the text from the WebElement
+        String investText = investmentAmount.getText();
+        extentTest.info("Print investText: " + investText);
 
-        // Comparing two float values directly might not be accurate due to the nature of floating-point arithmetic.
-        // Consider a small threshold for comparison, e.g., 0.01
-        float threshold = 0.00f;
-        if (totalInvest== investmentAmountValue) {
-            extentTest.info("The invest values are equal.");
+        // Remove non-numeric characters, except the decimal point and digits.
+        String numericValueStr = investText.replaceAll("[^\\d.]", "");
+        extentTest.info("Numeric part of investText: " + numericValueStr);
+
+        // Parse the cleaned string as a float.
+        float matchValue = Float.parseFloat(numericValueStr);
+        extentTest.info("Parsed numeric value: " + matchValue);
+
+        // Define a small threshold for comparing floating-point numbers to handle precision issues.
+        final float EPSILON = 0.001f;
+        if (Math.abs(matchValue - f) < EPSILON) {
+            extentTest.info("Match found with value: " + matchValue);
         } else {
-            extentTest.info("The invest values are not equal. totalInvest: " + totalInvest + ", investmentAmountValue: " + investmentAmountValue);
+            extentTest.info("No match. Parsed value: " + matchValue + ", Expected: " + f);
         }
-
-        return totalInvest;
     }
+
 }

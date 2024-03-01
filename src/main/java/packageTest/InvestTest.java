@@ -22,14 +22,15 @@ public class InvestTest extends BaseTest {
         investPage.setCheckSlicesRemaining();
         extentTest.info("check......." +driver.getCurrentUrl());
         Thread.sleep(3000);
-        investPage.setPrimaryInvestValue();
         investPage.setPrimaryInvestBtn();
         extentTest.info("Naviagtion to invest " +driver.getCurrentUrl());
         Thread.sleep(2000);
         investPage.setInvestTnC();
+        investPage.setInvestTnC();
+        float f = investPage.setPrimaryInvestValue();
         investPage.setInvestBtn();
         Thread.sleep(2000);
-        investPage.setInvestmentAmount();
+        investPage.setInvestmentAmount(f);
         Thread.sleep(20000);
 
 
